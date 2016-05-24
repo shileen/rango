@@ -4,7 +4,8 @@ from django.shortcuts import render_to_response
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     #Obtain the context from HTTP request
@@ -64,6 +65,7 @@ def category(request, category_name_url):
     
     return render_to_response('rango/category.html',context_dict,context)
 
+@login_required
 def add_category(request):
     context=RequestContext(request)
     if request.method=='POST':
@@ -80,6 +82,7 @@ def add_category(request):
         
     return render_to_response('rango/add_category.html',{'form':form},context)
 
+@login_required
 def add_page(request, category_name_url):
     context=RequestContext(request)
     category_name=decode(category_name_url)
@@ -151,7 +154,10 @@ def user_login(request):
     else:
         return render_to_response('rango/login.html',{},context)
     
-
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect('/rango/')
 
 
 def encode(raw_url):

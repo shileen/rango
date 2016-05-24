@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-{% load static %}
+{% extends 'rango/base.html' %}
 
-<html>
-<head>
-    <title>Rango</title>
-</head>
-<body>
+{% block title %}Home{% endblock %}
+{% block body_block %}
     
    <h1>Homepage</h1><br />
    {% if user.is_authenticated %}
@@ -14,7 +10,7 @@
    <h2>Welcome, Guest!</h2>
    {% endif %}
    
-   <br /><a href="/rango/login/">Login</a><br />
+  
    {%if categories %}
         <ul>
             {%for category in categories %}
@@ -22,14 +18,8 @@
             {% endfor %}
         </ul>
     {% else %}
-        <strong> There are no categor present. </strong>
+        <strong> There are no categories present. </strong>
     {% endif %}
-    <br />
-    <a href="/rango/about/">About</a>
-    <br />
-    <a href="/rango/add_category/">Add a New Category</a>
-    <br />
-    <a href="/rango/register">Register Here</a>
-        
-</body>
-</html>
+
+   
+ {% endblock %}
