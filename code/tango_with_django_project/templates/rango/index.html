@@ -10,7 +10,7 @@
    <h2>Welcome, Guest!</h2>
    {% endif %}
    
-  
+    <h2>Top Five Categories</h2>
    {%if categories %}
         <ul>
             {%for category in categories %}
@@ -20,6 +20,17 @@
     {% else %}
         <strong> There are no categories present. </strong>
     {% endif %}
+    <br />
+    <h2>Top Five Pages</h2>
+        {% if pages %}
+        <ul>
+            {% for page in pages %}
+            <li><a href="{{ page.url}}">{{ page.title }}</a> - {{ page.category}} ({{ page.views }} view(s))</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <strong>No pages at present.</strong>
+        {% endif %}
 
    
  {% endblock %}
