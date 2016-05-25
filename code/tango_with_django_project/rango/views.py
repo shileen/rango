@@ -25,6 +25,8 @@ def get_category_list(max_results=0, starts_with=''):
     
     return cat_list
 
+
+
 def search(request):
     context= RequestContext(request)
     result_list=[]
@@ -38,6 +40,7 @@ def index(request):
     #Obtain the context from HTTP request
     context = RequestContext(request)
     
+    
     # Query db for a list of ALL cats
     # Arrange in desc ord of likes
     # Retrieve the top 5 only - or all if less than 5
@@ -45,7 +48,8 @@ def index(request):
     category_list=Category.objects.order_by('-likes')[:5]
     page_list=Page.objects.order_by('-views')[:5]
     context_dict= {'categories': category_list, 'pages':page_list}
-    
+    cat_list = get_category_list()
+    context_dict['cat_list'] = cat_list
     for category in category_list:
         category.url = category.name.replace(' ','_')
     
@@ -69,11 +73,14 @@ def index(request):
 
 def about(request):
     context= RequestContext(request)
+    
     if request.session.get('visits'):
         count=request.session.get('visits')
     else:
         count=0
     context_dict={'visits':count}
+    cat_list = get_category_list()
+    context_dict['cat_list'] = cat_list
     return render_to_response('rango/about.html', context_dict, context)
 
 def category(request, category_name_url):
@@ -107,12 +114,16 @@ def category(request, category_name_url):
         # We get here if we didn't find the specified category.
         # Don't do anything - the template displays the "no category" message for us.
         pass
-    
+    cat_list = get_category_list()
+
+    context_dict['cat_list'] = cat_list
     return render_to_response('rango/category.html',context_dict,context)
 
 @login_required
 def add_category(request):
     context=RequestContext(request)
+   
+    
     if request.method=='POST':
         form=CategoryForm(request.POST)
         
@@ -124,12 +135,17 @@ def add_category(request):
     
     else:
         form=CategoryForm()
-        
-    return render_to_response('rango/add_category.html',{'form':form},context)
+    
+    context_dict={'form':form}
+    cat_list = get_category_list()
+
+    context_dict['cat_list'] = cat_list
+    return render_to_response('rango/add_category.html',context_dict,context)
 
 @login_required
 def add_page(request, category_name_url):
     context=RequestContext(request)
+    
     category_name=decode(category_name_url)
     if request.method=='POST':
         form=PageForm(request.POST)
@@ -148,8 +164,12 @@ def add_page(request, category_name_url):
             print form.errors
     else:
         form=PageForm()
+    context_dict={'category_name_url':category_name_url, 'category_name':category_name,'form':form}
     
-    return render_to_response('rango/add_page.html',{'category_name_url':category_name_url, 'category_name':category_name, 'form':form},context)
+    cat_list = get_category_list()
+
+    context_dict['cat_list'] = cat_list
+    return render_to_response('rango/add_page.html',context_dict,context)
                 
 def register(request):
     context=RequestContext(request)
@@ -175,8 +195,12 @@ def register(request):
     else:
         user_form=UserForm()
         profile_form=UserProfileForm()
-        
-    return render_to_response('rango/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
+    context_dict={'user_form':user_form,'profile_form':profile_form, 'registered':registered}
+    cat_list = get_category_list()
+
+    context_dict['cat_list'] = cat_list
+    
+    return render_to_response('rango/register.html', context_dict,
             context)
 
 
