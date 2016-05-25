@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from rango.bing_search import run_query
 
 def get_category_list(max_results=0, starts_with=''):
     cat_list = []
@@ -23,6 +24,15 @@ def get_category_list(max_results=0, starts_with=''):
         cat.url = encode(cat.name)
     
     return cat_list
+
+def search(request):
+    context= RequestContext(request)
+    result_list=[]
+    if request.method=='POST':
+        query=request.POST['query'].strip()
+        if query:
+            result_list=run_query(query)
+    return render_to_response('rango/search.html',{'result_list':result_list}, context)
 
 def index(request):
     #Obtain the context from HTTP request
