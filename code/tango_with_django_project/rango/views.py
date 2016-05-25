@@ -8,6 +8,22 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
+def get_category_list(max_results=0, starts_with=''):
+    cat_list = []
+    if starts_with:
+        cat_list = Category.objects.filter(name__startswith=starts_with)
+    else:
+        cat_list = Category.objects.all()
+
+    if max_results > 0:
+        if (len(cat_list) > max_results):
+            cat_list = cat_list[:max_results]
+
+    for cat in cat_list:
+        cat.url = encode(cat.name)
+    
+    return cat_list
+
 def index(request):
     #Obtain the context from HTTP request
     context = RequestContext(request)
@@ -156,6 +172,9 @@ def register(request):
 
 def user_login(request):
     context=RequestContext(request)
+    cat_list=get_category_list()
+    context_dict={}
+    context_dict['cat_list']=cat_list
     if request.method=='POST':
         username=request.POST['username']
         password=request.POST['password']
@@ -166,12 +185,14 @@ def user_login(request):
                 login(request,user)
                 return HttpResponseRedirect('/rango/')
             else:
-                return HttpResponse("Your Rango account is disabled")
+                context_dict['disabled_account'] = True
+                return render_to_response('rango/login.html', context_dict, context)
         else:
             print "Invalid login details: {0},{1}".format(username, password)
-            return HttpResponse("Invalid login details supplied.")
+            context_dict['bad_details'] = True
+            return render_to_response('rango/login.html', context_dict, context)
     else:
-        return render_to_response('rango/login.html',{},context)
+        return render_to_response('rango/login.html', context_dict, context)
     
 @login_required
 def user_logout(request):

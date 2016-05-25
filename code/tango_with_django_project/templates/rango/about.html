@@ -4,10 +4,12 @@
 {% load static %}
 
 {% block body_block %}
+<div class="hero-unit">
     <h1>About page for rango </h1>
     <strong>This is rango</strong><br />
     {% if visits %}
     <p>You have been here <strong> {{ visits }} </strong> times</p>
     {% endif %}
     <img src="{% static "rango.jpg" %}" alt="Picture of Rango" /> 
+</div>
 {% endblock %}
