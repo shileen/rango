@@ -211,6 +211,18 @@ def track_url(request):
                 pass
     return redirect(url)
 
+# THE SUGGEST CATEGORY VIEW----------------------------
+def suggest_category(request):
+        context = RequestContext(request)
+        cat_list = []
+        starts_with = ''
+        if request.method == 'GET':
+                starts_with = request.GET['suggestion']
+
+        cat_list = get_category_list(8, starts_with)
+
+        return render_to_response('rango/category_list.html', {'cat_list': cat_list }, context)
+
 
 # THE PROFILE VIEW --------------------------------------- 
 @login_required
@@ -306,3 +318,42 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/rango/')
 
+# THE LIKE CATEGORY VIEW------------------------------------------------
+@login_required
+def like_category(request):
+    context = RequestContext(request)
+    cat_id= None
+    if request.method=='GET':
+        cat_id=request.GET['category_id']
+        
+    likes=0
+    if cat_id:
+        category=Category.objects.get(id=int(cat_id))
+        if category:
+            likes=category.likes+1
+            category.likes=likes
+            category.save()
+    return HttpResponse(likes)
+
+# THE AUTO ADD PAGE VIEW---------------------------------------------
+@login_required
+def auto_add_page(request):
+    context = RequestContext(request)
+    cat_id = None
+    url = None
+    title = None
+    context_dict = {}
+    if request.method == 'GET':
+        cat_id = request.GET['category_id']
+        url = request.GET['url']
+        title = request.GET['title']
+        if cat_id:
+            category = Category.objects.get(id=int(cat_id))
+            p = Page.objects.get_or_create(category=category, title=title, url=url)
+
+            pages = Page.objects.filter(category=category).order_by('-views')
+
+            # Adds our results list to the template context under name pages.
+            context_dict['pages'] = pages
+
+    return render_to_response('rango/page_list.html', context_dict, context)
