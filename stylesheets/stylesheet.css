@@ -105,12 +105,13 @@ header h2 {
 a.button {
   display: block;
   float: left;
-  width: 179px;
+  width: 120px;
+  height: auto;
   padding: 12px 8px 12px 8px;
-  margin-right: 14px;
+  margin-right: 10px;
   font-size: 15px;
   font-weight: bold;
-  line-height: 25px;
+  line-height: 12px;
   color: #303030;
   background: #fdfdfd; /* Old browsers */
   background: -moz-linear-gradient(top,  #fdfdfd 0%, #f2f2f2 100%); /* FF3.6+ */
@@ -162,7 +163,11 @@ a.button span {
   background: transparent url(../images/octocat-icon.png) 12px 50% no-repeat;
 }
 #view-on-github {
-  margin-right: 0;
+  margin-right: 10;
+}
+
+#webapp span {
+    background: transparent url(../images/fav.ico) 12px 50% no-repeat;
 }
 
 code, pre {
