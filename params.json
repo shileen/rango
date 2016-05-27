@@ -1,0 +1,6 @@
+{
+  "name": "Rango",
+  "tagline": "Implementation of TangoWithDjango book project - Rango",
+  "body": "# Rango\r\nMy first Django Project.\r\nThis project is an implementation of the Rango app in TangoWithDjango book.\r\nRango is a webpage directory which stores links to pages collected in a number of categories. Users can Like categories  and see the pages in those categories in the order of views.\r\n\r\nUsers can also add pages and categories to Rango. The top 5 most viewed pages and most popular categories can be seen on the homepage.\r\n\r\nThis project was built to learn basics of Django. The implemented features include: \r\n-Implementation of User Registration, Login and Authentication.\r\n-Implementation of Bing Search API to search for pages and quickly add to the categories.\r\n-Implementation of AJAX to provide \"Like\" functionality, Suggestion based search and Quick Page adds.",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
